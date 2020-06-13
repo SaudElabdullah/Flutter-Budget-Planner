@@ -20,7 +20,7 @@ This app built with `Provider` as a state management and many other component su
 
 2- iOS.
 
-## Tips to use it
+## Tips To Use It
 
 1- The floating button is to add new expense.
 
