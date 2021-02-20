@@ -32,4 +32,4 @@ And that's it.
 
 Dart is free and open source.
 
-Please feel free to this project in good way.
+Please feel free to edit this project in good way.
