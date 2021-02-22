@@ -6,6 +6,8 @@ import 'package:budgetplanner/Component/ModalBottomSheetWidget.dart';
 import 'package:budgetplanner/Component/TextWidget.dart';
 import 'package:budgetplanner/Component/Constants.dart';
 import 'package:budgetplanner/Models/SizeConfig.dart';
+import 'package:budgetplanner/Models/expensesData.dart';
+import 'package:budgetplanner/Models/Expenses.dart';
 import 'package:provider/provider.dart';
 
 class Main_Screen extends StatefulWidget {
@@ -14,10 +16,18 @@ class Main_Screen extends StatefulWidget {
 }
 
 class _Main_ScreenState extends State<Main_Screen> {
+  Expenses _expensesData;
+
+  @override
+  void initState() {
+    _expensesData = Provider.of<ExpensesData>(context).getAllExpenses();
+    super.initState();
+  }
+
   @override
   void didChangeDependencies() async {
     SizeConfig().init(context);
-    await Provider.of<ExpensesData>(context).setData();
+    await Provider.of<ExpensesData>(context).getAllExpenses();
     super.didChangeDependencies();
   }
 
@@ -65,7 +75,7 @@ class _Main_ScreenState extends State<Main_Screen> {
                   ),
                   onTap: () {
                     setState(() {
-                      Provider.of<ExpensesData>(context).deleteEveryThing();
+                      Provider.of<ExpensesData>(context).deleteAll();
                     });
                   },
                 ),
@@ -103,7 +113,9 @@ class _Main_ScreenState extends State<Main_Screen> {
                   indent: 10,
                   endIndent: 10,
                 ),
-                ListViewWidget(),
+                ListViewWidget(
+                  expenses: _expensesData,
+                ),
               ],
             ),
           ),

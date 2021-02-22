@@ -4,6 +4,7 @@ import 'package:budgetplanner/Component/TextWidget.dart';
 import 'package:budgetplanner/Component/DropdownButtonWidget.dart';
 import 'package:budgetplanner/Models/expensesData.dart';
 import 'package:budgetplanner/Models/SizeConfig.dart';
+import 'package:budgetplanner/Models/Expenses.dart';
 import 'package:provider/provider.dart';
 
 class ModalSheetWidget extends StatefulWidget {
@@ -12,12 +13,19 @@ class ModalSheetWidget extends StatefulWidget {
 }
 
 class _ModalSheetWidgetState extends State<ModalSheetWidget> {
+  final myController = TextEditingController();
   Color iconColorOne = Constants.secondaryColor;
   Color iconColorTwo = Constants.secondaryColor;
   String amount;
   String expense;
   String date;
   String type;
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +60,7 @@ class _ModalSheetWidgetState extends State<ModalSheetWidget> {
               textAlign: TextAlign.center,
             ),
             TextField(
+              controller: myController,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
               cursorColor: Constants.secondaryColor,
@@ -141,23 +150,15 @@ class _ModalSheetWidgetState extends State<ModalSheetWidget> {
               ),
               color: Constants.shadeOfSecondaryColor,
               onPressed: () {
-                if (amount != null && type != null && expense != null) {
-                  date = DateTime.now().month.toString() +
-                      '/' +
-                      DateTime.now().day.toString();
-                  if (type == 'spent') {
-                    Provider.of<ExpensesData>(context)
-                        .changeTotalSpent(double.parse(amount));
-                  } else {
-                    Provider.of<ExpensesData>(context)
-                        .changeTotalIncome(double.parse(amount));
-                  }
-                  Provider.of<ExpensesData>(context)
-                      .addExpense(type, amount, expense, date);
-                  amount = null;
-                  type = null;
-                  Navigator.pop(context);
-                }
+                myController.clear();
+                Provider.of<ExpensesData>(context).newExpenses(new Expenses(
+                    type: this.type,
+                    amount: this.amount,
+                    expenses: this.expense,
+                    date: this.date));
+                amount = null;
+                type = null;
+                Navigator.pop(context);
               },
             ),
             SizedBox(

@@ -1,82 +1,87 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'dart:collection';
+import 'dart:io';
 import 'package:budgetplanner/Models/Expenses.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'package:flutter/widgets.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 
 class ExpensesData extends ChangeNotifier {
-  List<Expenses> _history = [];
-  double totalIncome = 0;
-  double totalSpent = 0;
-  double currentBalance = 0;
+  ExpensesData._();
+  static final ExpensesData db = ExpensesData._();
 
-  Future setData() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.getDouble('totalIncome') == null
-        ? totalIncome = 0
-        : totalIncome = prefs.getDouble('totalIncome');
-    prefs.getDouble('totalSpent') == null
-        ? totalSpent = 0
-        : totalSpent = prefs.getDouble('totalSpent');
-    prefs.getDouble('currentBalance') == null
-        ? currentBalance = 0
-        : currentBalance = prefs.getDouble('currentBalance');
-    int index = 0;
-    try {
-      _history.clear();
-      while (prefs.containsKey(index.toString())) {
-        _history
-            .add(Expenses.fromJson(json.decode(prefs.get(index.toString()))));
-        index++;
-      }
-    } catch (e) {
-      print(null);
-    }
+  static Database _database;
+
+  Future<Database> get database async {
+    if (_database != null)
+      return _database;
+
+    // if _database is null we instantiate it
+    _database = await initDB();
+    return _database;
   }
 
-  void changeTotalIncome(double change) async {
-    final prefs = await SharedPreferences.getInstance();
-    totalIncome = totalIncome + change;
-    currentBalance = currentBalance + change;
-    prefs.setDouble('totalIncome', totalIncome);
-    prefs.setDouble('currentBalance', currentBalance);
+
+  initDB() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, "TestDB.db");
+    return await openDatabase(path, version: 1, onOpen: (db) {
+    }, onCreate: (Database db, int version) async {
+      await db.execute("CREATE TABLE Expense ("
+          "id INTEGER AUTOINCREMENT PRIMARY KEY,"
+          "amount TEXT,"
+          "expenses TEXT,"
+          "date TEXT,"
+          "type TEXT,"
+          ")");
+    });
   }
 
-  void changeTotalSpent(double change) async {
-    final prefs = await SharedPreferences.getInstance();
-    totalSpent = totalSpent + change;
-    currentBalance = currentBalance - change;
-    prefs.setDouble('totalSpent', totalSpent);
-    prefs.setDouble('currentBalance', currentBalance);
+  newExpenses(Expenses newExpenses) async {
+    final db = await database;
+    var res = await db.insert("Expenses", newExpenses.toMap());
+    return res;
   }
 
-  UnmodifiableListView<Expenses> get expenses {
-    return UnmodifiableListView(_history);
+  getAllExpenses() async {
+    final db = await database;
+    var res = await db.query("Expenses");
+    List<Expenses> list = res.map((c) => Expenses.fromMap(c)).toList();
+    return list;
   }
 
-  int get historyCount {
-    return _history.length;
+  deleteClient(int id) async {
+    final db = await database;
+    db.delete("Expenses", where: "id = ?", whereArgs: [id]);
   }
 
-  Future<void> addExpense(
-      String type, String amount, String expense, String date) async {
-    final prefs = await SharedPreferences.getInstance();
-    final Expenses newExpense = Expenses(
-      type: type,
-      amount: amount,
-      expenses: expense,
-      date: date,
-    );
-    prefs.setString(this.historyCount.toString(), json.encode(newExpense));
-    _history.add(newExpense);
-    notifyListeners();
+  deleteAll() async {
+    final db = await database;
+    db.rawDelete("Delete * from Expenses");
   }
 
-  void deleteEveryThing() async {
-    final prefs = await SharedPreferences.getInstance();
-    _history.clear();
-    prefs.clear();
-    notifyListeners();
+  currentBalance() async {
+    final db = await database;
+    var res = await db.execute("SELECT SUM(amount) as amount FROM Expenses");
+    return res;
+  }
+
+  totalIncome() async {
+    final db = await database;
+    var res = await db.execute("SELECT SUM(amount) as amount WHERE type = 'Income' FROM Expenses");
+    return res;
+  }
+
+  totalSpent() async {
+    final db = await database;
+    var res = await db.execute("SELECT SUM(amount) as amount WHERE type = 'Spent   ' FROM Expenses");
+    return res;
+  }
+
+  length() async {
+    final db = await database;
+    var res = await db.execute("SELECT COUNT(amount) as amount WHERE FROM Expenses");
+    return res;
   }
 }

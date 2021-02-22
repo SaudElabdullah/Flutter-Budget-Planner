@@ -8,15 +8,12 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ExpensesData(),
-      child: MaterialApp(
-        title: 'Budget Planner',
-        theme: ThemeData(
-          fontFamily: 'PlayfairDisplay',
-        ),
-        home: Main_Screen(),
+    return MaterialApp(
+      title: 'Budget Planner',
+      theme: ThemeData(
+        fontFamily: 'PlayfairDisplay',
       ),
+      home: Main_Screen(),
     );
   }
 }
