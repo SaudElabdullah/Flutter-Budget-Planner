@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:budgetplanner/Component/TextWidget.dart';
-import 'package:budgetplanner/Component/Constants.dart';
-import 'package:budgetplanner/Models/Expenses.dart';
-import 'package:budgetplanner/Models/SizeConfig.dart';
+import 'package:budgetplanner/Component/Widgets/TextWidget.dart';
+import 'package:budgetplanner/Component/Constants/Constants.dart';
+import 'package:budgetplanner/entities/Expenses.dart';
+import 'package:budgetplanner/utilities/SizeConfig.dart';
 
 class ListTileWidget extends StatelessWidget {
 

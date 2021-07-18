@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:budgetplanner/Models/SizeConfig.dart';
-import 'package:budgetplanner/Component/Constants.dart';
+import 'package:budgetplanner/utilities/SizeConfig.dart';
+import 'package:budgetplanner/Component/Constants/Constants.dart';
 
 class DropdownButtonWidget extends StatefulWidget {
   final Function expenseType;

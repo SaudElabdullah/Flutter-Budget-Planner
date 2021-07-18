@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:budgetplanner/Models/Expenses.dart';
+import 'package:budgetplanner/entities/Expenses.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
@@ -40,8 +40,8 @@ class ExpensesData extends ChangeNotifier {
 
   newExpenses(Expenses newExpenses) async {
     final db = await database;
-    var res = await db.insert("Expenses", newExpenses.toMap());
-    return res;
+    await db.insert("Expenses", newExpenses.toMap());
+    notifyListeners();
   }
 
   getAllExpenses() async {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:budgetplanner/Component/Constants.dart';
-import 'package:budgetplanner/Component/TextWidget.dart';
-import 'package:budgetplanner/Component/DropdownButtonWidget.dart';
-import 'package:budgetplanner/Models/expensesData.dart';
-import 'package:budgetplanner/Models/SizeConfig.dart';
-import 'package:budgetplanner/Models/Expenses.dart';
+import 'package:budgetplanner/Component/Constants/Constants.dart';
+import 'package:budgetplanner/Component/Widgets/TextWidget.dart';
+import 'package:budgetplanner/Component/Widgets/DropdownButtonWidget.dart';
+import 'package:budgetplanner/services/Expenses_Data.dart';
+import 'package:budgetplanner/utilities/SizeConfig.dart';
+import 'package:budgetplanner/entities/Expenses.dart';
 import 'package:provider/provider.dart';
 
 class ModalSheetWidget extends StatefulWidget {
@@ -143,23 +143,25 @@ class _ModalSheetWidgetState extends State<ModalSheetWidget> {
             SizedBox(
               height: SizeConfig.screenWidth * 3,
             ),
-            FlatButton(
-              child: TextWidget(
-                text: 'Add Expense',
-                size: SizeConfig.screenWidth * 7,
-              ),
+            Container(
               color: Constants.shadeOfSecondaryColor,
-              onPressed: () {
-                myController.clear();
-                Provider.of<ExpensesData>(context).newExpenses(new Expenses(
-                    type: this.type,
-                    amount: this.amount,
-                    expenses: this.expense,
-                    date: this.date));
-                amount = null;
-                type = null;
-                Navigator.pop(context);
-              },
+              child: TextButton(
+                child: TextWidget(
+                  text: 'Add Expense',
+                  size: SizeConfig.screenWidth * 7,
+                ),
+                onPressed: () {
+                  myController.clear();
+                  Provider.of<ExpensesData>(context).newExpenses(new Expenses(
+                      type: this.type,
+                      amount: this.amount,
+                      expenses: this.expense,
+                      date: this.date));
+                  amount = null;
+                  type = null;
+                  Navigator.pop(context);
+                },
+              ),
             ),
             SizedBox(
               height: SizeConfig.screenWidth * 10,

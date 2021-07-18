@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:budgetplanner/Component/TextWidget.dart';
-import 'package:budgetplanner/Component/Constants.dart';
-import 'package:budgetplanner/Models/SizeConfig.dart';
+import 'package:budgetplanner/Component/Widgets/TextWidget.dart';
+import 'package:budgetplanner/Component/Constants/Constants.dart';
+import 'package:budgetplanner/utilities/SizeConfig.dart';
 
 class CardWidget extends StatelessWidget {
   CardWidget({

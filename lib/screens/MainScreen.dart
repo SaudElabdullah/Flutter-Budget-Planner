@@ -1,33 +1,28 @@
-import 'package:budgetplanner/Models/expensesData.dart';
+import 'package:budgetplanner/services/Expenses_Data.dart';
 import 'package:flutter/material.dart';
-import 'package:budgetplanner/Component/Card.dart';
-import 'package:budgetplanner/Component/ListView.dart';
-import 'package:budgetplanner/Component/ModalBottomSheetWidget.dart';
-import 'package:budgetplanner/Component/TextWidget.dart';
-import 'package:budgetplanner/Component/Constants.dart';
-import 'package:budgetplanner/Models/SizeConfig.dart';
-import 'package:budgetplanner/Models/expensesData.dart';
-import 'package:budgetplanner/Models/Expenses.dart';
+import 'package:budgetplanner/Component/Widgets/Card.dart';
+import 'package:budgetplanner/Component/Widgets/ListView.dart';
+import 'package:budgetplanner/Component/Widgets/ModalBottomSheetWidget.dart';
+import 'package:budgetplanner/Component/Widgets/TextWidget.dart';
+import 'package:budgetplanner/Component/Constants/Constants.dart';
+import 'package:budgetplanner/utilities/SizeConfig.dart';
 import 'package:provider/provider.dart';
 
-class Main_Screen extends StatefulWidget {
+class MainScreen extends StatefulWidget {
   @override
-  _Main_ScreenState createState() => _Main_ScreenState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _Main_ScreenState extends State<Main_Screen> {
-  Expenses _expensesData;
+class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    _expensesData = Provider.of<ExpensesData>(context).getAllExpenses();
     super.initState();
   }
 
   @override
   void didChangeDependencies() async {
     SizeConfig().init(context);
-    await Provider.of<ExpensesData>(context).getAllExpenses();
     super.didChangeDependencies();
   }
 
@@ -113,8 +108,8 @@ class _Main_ScreenState extends State<Main_Screen> {
                   indent: 10,
                   endIndent: 10,
                 ),
-                ListViewWidget(
-                  expenses: _expensesData,
+                ListViewWidget (
+                  expenses: Provider.of<ExpensesData>(context).getAllExpenses(),
                 ),
               ],
             ),
