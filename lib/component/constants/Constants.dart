@@ -18,8 +18,8 @@ class Constants {
   static IconData incomeIcon = Icons.arrow_downward;
   static IconData spentIcon = Icons.arrow_upward;
 
-  static Color mainColor = Color(0xFF000000);
-  static Color secondaryColor = Color(0xFFFFFFFF);
-  static Color shadeOfSecondaryColor = Color(0x99FFFFFF);
-  static Color shadeOfMainColor = Color(0xff212121);
+  static Color mainColor = const Color(0xFF000000);
+  static Color secondaryColor = const Color(0xFFFFFFFF);
+  static Color shadeOfSecondaryColor = const Color(0x99FFFFFF);
+  static Color shadeOfMainColor =  const Color(0xff212121);
 }
